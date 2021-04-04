@@ -12,7 +12,7 @@
     "url": "git+https://github.com/hisokaSV/hisokasvbot.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Shirotsuki",
   "license": "ISC",
   "dependencies": {
     "@discordjs/opus": "github:discordjs/opus",
