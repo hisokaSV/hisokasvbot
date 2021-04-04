@@ -7,7 +7,7 @@ module.exports = class JoinCommand extends Command {
             aliases: ['j'],
             group: 'music',
             memberName: 'join',
-            description: 'Ajoute le bot sur votre vocal',
+            description: 'Ajoute le bot sur votre vocal'
         });
     }
 
