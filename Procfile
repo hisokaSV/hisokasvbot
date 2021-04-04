@@ -1,0 +1,1 @@
+worker: node HerokuBot.js
