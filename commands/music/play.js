@@ -9,7 +9,7 @@ module.exports = class PlayCommand extends Command {
             aliases: ['p'],
             group: 'music',
             memberName: 'play',
-            description: 'lis une musique depuis YouTube',
+            description: 'lis une musique depuis YouTube `-play` ou `-p` + url YouTube',
             args: [
                 {
                     key: 'query',
@@ -50,7 +50,7 @@ module.exports = class PlayCommand extends Command {
      */
     async runVideo(message, connection, videoUrl) {
         const server = message.client.server;
-        const dispatcher = connection.play( await ytdl(videoUrl, {filter: 'audioonly' }), {type: 'opus' } )
+        const dispatcher = connection.play( await ytdl(videoUrl, {filter: 'audioonly' }), {type: 'opus' } );
 
         server.queue.shift();
         server.dispatcher = dispatcher;
@@ -62,6 +62,8 @@ module.exports = class PlayCommand extends Command {
             }
             else message.member.voice.channel.leave();
         });
+
+        const url = server.currentVideo.url;
 
         return message.say("En train de jouer :notes: ");
     }
