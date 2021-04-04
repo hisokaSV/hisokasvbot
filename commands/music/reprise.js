@@ -8,7 +8,7 @@ module.exports = class ResumeCommand extends Command {
             aliases: ['r'],
             group: 'music',
             memberName: 'reprise',
-            description: 'Reprend la lecture de la musique en pause',
+            description: 'Reprend la lecture de la musique en pause'
         });
     }
 
@@ -27,7 +27,7 @@ module.exports = class ResumeCommand extends Command {
             return message.say(':x: Tu dois ètre dans un salon vocal pour utiliser cette commande :x:');
         }
         if (!message.client.voice.connections.first()) {
-            return message.say(":x: Je ne suis pas connecté a un salon vocal. Tape `join` pour m'ajouter :x:")
+            return message.say(":x: Je ne suis pas connecté a un salon vocal. Tape `join` pour m'ajouter :x:");
         }
           
         if(dispatcher){
