@@ -1,1 +1,1 @@
-worker: node HerokuBot.js
+worker: node bot.js
