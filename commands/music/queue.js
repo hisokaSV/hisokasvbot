@@ -29,7 +29,7 @@ module.exports = class QueueCommand extends Command {
         const server = message.client.server;
 
         if(!message.client.voice.connections.first()) {
-            return message.say(":x: Je ne suis pas connecté a un salon vocal. Tape `-join` pour m'ajouter")
+            return message.say(":x: Je ne suis pas connecté a un salon vocal. Tape `-join` pour m'ajouter");
         }
 
         /* page--; */
