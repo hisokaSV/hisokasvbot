@@ -1,3 +1,4 @@
+const { UserNotInVoiceChannel } = require('../../strings.json');
 const {VoiceConnection} = require('discord.js');
 const { Command, CommandoMessage } = require("discord.js-commando");
 const ytdl = require('ytdl-core-discord');
@@ -14,7 +15,7 @@ module.exports = class PlayCommand extends Command {
                 {
                     key: 'query',
                     prompt: 'Quel musique veux tu ecouter ?',
-                    type: 'string'
+                    type: 'string',
                 }
             ]
         });
@@ -29,7 +30,7 @@ module.exports = class PlayCommand extends Command {
         const server = message.client.server;
 
         if (!message.member.voice.channel) {
-            return message.say(':x: Tu dois ètre dans un salon vocal pour utiliser cette commande :x:');
+            return message.say(UserNotInVoiceChannel);
         }
 
         await message.member.voice.channel.join().then((connection) => {
@@ -38,7 +39,7 @@ module.exports = class PlayCommand extends Command {
                 return message.say("Ajouté à la file d'attente");
             }
             server.currentVideo = { title: "", url: query};
-            this.runVideo(message, connection, query);
+            this.runVideo(message, connection, query)
         });
     }
 
@@ -54,11 +55,12 @@ module.exports = class PlayCommand extends Command {
 
         server.queue.shift();
         server.dispatcher = dispatcher;
+        server.connection = connection;
 
         dispatcher.on('finish', () => {
             if (server.queue[0]) {
                 server.currentVideo = server.queue[0];
-                return this.runVideo(message, connection, server.currentVideo.url);                
+                return this.runVideo(message, connection, server.currentVideo.url);              
             }
             else message.member.voice.channel.leave();
         });
