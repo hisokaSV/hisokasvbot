@@ -1,7 +1,11 @@
 const { UserNotInVoiceChannel } = require('../../strings.json');
 const {VoiceConnection} = require('discord.js');
 const { Command, CommandoMessage } = require("discord.js-commando");
-const ytdl = require('ytdl-core-discord');
+const { key } = require('../../config.json');
+
+const ytdl = require('ytdl-core');
+const ytsr = require('youtube-search');
+
 
 module.exports = class PlayCommand extends Command {
     constructor(client) {
@@ -13,7 +17,7 @@ module.exports = class PlayCommand extends Command {
             description: 'lis une musique depuis YouTube `-play` ou `-p` + url YouTube',
             args: [
                 {
-                    key: 'query',
+                    key: 'term',
                     prompt: 'Quel musique veux tu ecouter ?',
                     type: 'string',
                 }
@@ -26,7 +30,7 @@ module.exports = class PlayCommand extends Command {
      * @param {CommandoMessage} message 
      * @param {String} query
      */
-    async run(message, { query }) {
+    async run(message, { term }) {
         const server = message.client.server;
 
         if (!message.member.voice.channel) {
@@ -34,12 +38,20 @@ module.exports = class PlayCommand extends Command {
         }
 
         await message.member.voice.channel.join().then((connection) => {
-            if (server.currentVideo.url != "") {
-                server.queue.push({ title: "", url: query});
-                return message.say("Ajouté à la file d'attente");
-            }
-            server.currentVideo = { title: "", url: query};
-            this.runVideo(message, connection, query)
+
+            ytsr(term, { key: key, maxResults: 1, type: 'video' }).then((results) => {
+                if (results.results[0]) {
+                    const foundVideo = {url: results.results[0].link, title: results.results[0].title };
+
+                    if (server.currentVideo.url != "") {
+                        server.queue.push(foundVideo);
+                        return message.say("`" + foundVideo.title + "`" + " - Ajouté à la file d'attente");
+                    }
+                    server.currentVideo = foundVideo;
+                    this.runVideo(message, connection);
+
+                }    
+            });
         });
     }
 
@@ -49,9 +61,10 @@ module.exports = class PlayCommand extends Command {
      * @param {VoiceConnection} connection 
      * @param {*} video 
      */
-    async runVideo(message, connection, videoUrl) {
+    async runVideo(message, connection) {
         const server = message.client.server;
-        const dispatcher = connection.play( await ytdl(videoUrl, {filter: 'audioonly' }), {type: 'opus' } );
+
+        const dispatcher = connection.play(ytdl(server.currentVideo.url, {filter: 'audioonly' }));
 
         server.queue.shift();
         server.dispatcher = dispatcher;
@@ -65,8 +78,6 @@ module.exports = class PlayCommand extends Command {
             else message.member.voice.channel.leave();
         });
 
-        const url = server.currentVideo.url;
-
-        return message.say("En train de jouer :notes: ");
+        return message.say("En train de jouer" + "`" + server.currentVideo.title + "`" + ":notes:");
     }
 }
