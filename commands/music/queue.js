@@ -1,5 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 const { Command, CommandoMessage } = require("discord.js-commando");
+const { BotNotInVoiceChannel } = require('../../strings.json');
 
 module.exports = class QueueCommand extends Command {
     constructor(client) {
@@ -29,7 +30,7 @@ module.exports = class QueueCommand extends Command {
         const server = message.client.server;
 
         if(!message.client.voice.connections.first()) {
-            return message.say(":x: Je ne suis pas connecté a un salon vocal. Tape `-join` pour m'ajouter");
+            return message.say(BotNotInVoiceChannel);
         }
 
         /* page--; */
