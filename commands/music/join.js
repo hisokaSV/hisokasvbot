@@ -1,4 +1,5 @@
 const { Command, CommandoMessage } = require("discord.js-commando");
+const { UserNotInVoiceChannel } = require('../../strings.json');
 
 module.exports = class JoinCommand extends Command {
     constructor(client) {
@@ -7,7 +8,7 @@ module.exports = class JoinCommand extends Command {
             aliases: ['j'],
             group: 'music',
             memberName: 'join',
-            description: 'Ajoute le bot sur votre vocal'
+            description: 'Ajoute le bot sur votre vocal `-join` ou `-j`'
         });
     }
 
@@ -20,11 +21,11 @@ module.exports = class JoinCommand extends Command {
         const voicechannel = message.member.voice.channel;
 
         if (!message.member.voice.channel) {
-            return message.say(':x: Tu dois ètre dans un salon vocal pour utiliser cette commande :x:');
+            return message.say(UserNotInVoiceChannel);
         }
 
         await voicechannel.join();
 
-        return message.say(":thumbsup: J'ai rejoins" + "`" + voicechannel.name + "`");
+        return message.say(":thumbsup: J'ai rejoins" + "`" + message.member.voice.channel.name + "`");
     }
 }
