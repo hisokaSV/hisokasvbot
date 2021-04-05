@@ -1,6 +1,6 @@
 const { Command, CommandoMessage } = require("discord.js-commando");
 const { UserNotInVoiceChannel, BotNotInVoiceChannel } = require('../../strings.json');
-const ytdl = require('ytdl-core-discord');
+const ytdl = require('ytdl-core');
 
 module.exports = class SkipCommand extends Command {
     constructor(client) {
@@ -36,7 +36,7 @@ module.exports = class SkipCommand extends Command {
         }
 
         server.currentVideo = server.queue[0];
-        server.connection.play( await ytdl(server.currentVideo.url, {filter: 'audioonly' }), {type: 'opus' } );
+        server.dispatcher = server.connection.play( await ytdl(server.currentVideo.url, {filter: 'audioonly' }));
         server.queue.shift();
 
         return message.say(":fast_forward: Ignoré :thumbsup:");
