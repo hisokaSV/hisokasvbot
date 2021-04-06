@@ -36,6 +36,6 @@ module.exports = class PauseCommand extends Command {
            dispatcher.pause();
         }
 
-        return message.say(":pause_bouton: Pause :thumbsup:");
+        return message.say(":pause_button: Pause :thumbsup:");
     }
 }
