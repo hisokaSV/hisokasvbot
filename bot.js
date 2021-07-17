@@ -13,6 +13,7 @@ client.registry
     .registerDefaultGroups()
     .registerDefaultCommands()
     .registerGroup('music', 'Music')
+    .registerGroup('message', 'Message')
     .registerCommandsIn(path.join(__dirname, 'commands'));
 
 client.server ={
